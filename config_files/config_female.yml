@@ -1,0 +1,17 @@
+default:
+  recovery.mode : false # all data for analysis are preprocessed and saved to a disk after first run. After they could be reused in recovery.mod
+  install.libraries: false
+  is.case.control.analysis: true # to separate preprocessing step betweem HA dataset and multigroup
+  project.dir: "/projects/cgstudies/HA_GWAS_2017/Healthy_Aging_GWAS_2017_ABW-P01/Analysis/HAS_Het_Analysis_OLGA/Heterozygosity_tests"
+  plink.MAF.path: "plink_output/MAF_female_non0MAF.frq"
+  plink.hardy.path: "plink_output/HWE_cc_female.hwe"
+  
+  subgroup.pref: "female_"  # options: "female_" "male_"
+  stat.plots.dir: "EOH_female" # if == "" plots will be save to the root of "plots" directory, otherwise to the the subdirectory
+  snp.filter: "" # options: "HLA_" "syn_" ""nonsyn_" "coding_" "noncoding_" "intron_" "intergenic_"
+  snp.filter.path: ""
+  
+  do.homozygosity.test: false # check for excess of homozygosity for a minor allele
+  do.stat.test: true # Mann–Whitney U Test and Fligner test for each pair of groups
+  save.plots:   true # save EoH distribution, QQ plots, scatter plots, barchart for MAF binc etc.
+
