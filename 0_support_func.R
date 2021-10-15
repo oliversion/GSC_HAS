@@ -1,8 +1,6 @@
 library(plyr)
 library(ggplot2)
-#library("GGally") 
 library(gtable)
-#library(gridExtra)
 
 # ====================================================================
 # 1.          Excess of heterozygosity 
@@ -248,30 +246,6 @@ odd.ratio.test = function(in.df, param){
   df.odds.ratio$R.Aa.controls = in.df$R.Aa[in.df$GROUP=="controls"]
   df.odds.ratio$OR.AA = df.odds.ratio$R.AA/df.odds.ratio$R.AA.controls
   df.odds.ratio$OR.Aa = df.odds.ratio$R.Aa/df.odds.ratio$R.Aa.controls
-  # 
-  # plots.path = sprintf("%s/plots", param$project.dir)
-  # file.path = sprintf("%s/%s/", plots.path, param$stat.plots.dir)
-  # 
-  # png(sprintf("%s/plots/%s/%s%sR_AA.png", param$project.dir, param$stat.plots.dir, param$subgroup.pref, param$snp.filter),
-  #     width = 350, height = 350)
-  # plot(df.odds.ratio$R.AA, df.odds.ratio$R.AA.controls, main = "R_AA HA vs controls", xlab = "HA", ylab = "controls")
-  # abline(a=0, b=1)
-  # dev.off()
-  # 
-  # png(sprintf("%s/plots/%s/%s%sR_Aa.png", param$project.dir, param$stat.plots.dir, param$subgroup.pref, param$snp.filter),
-  #     width = 350, height = 350)
-  # plot(df.odds.ratio$R.Aa, df.odds.ratio$R.Aa.controls, main = "R_Aa HA vs controls", xlab = "HA", ylab = "controls")
-  # dev.off()
-  # 
-  # png(sprintf("%s/plots/%s/%s%sOR_AA.png", param$project.dir, param$stat.plots.dir, param$subgroup.pref, param$snp.filter),
-  #     width = 350, height = 350)
-  # plot(df.odds.ratio$MAF, df.odds.ratio$OR.AA, main = "OR_AA HA vs controls", xlab = "MAF", ylab = "OR")
-  # dev.off()
-  # 
-  # png(sprintf("%s/plots/%s/%s%sOR_Aa.png", param$project.dir, param$stat.plots.dir, param$subgroup.pref, param$snp.filter),
-  #     width = 350, height = 350)
-  # plot(df.odds.ratio$MAF, df.odds.ratio$OR.Aa, main = "OR_Aa HA vs controls", xlab = "MAF", ylab = "OR")
-  # dev.off()
   return(df.odds.ratio)
 }
 
@@ -399,12 +373,7 @@ plot.eoh = function(in.df, param, varname="EoH", maf.bin = 0){
   p = ggplot(in.df, aes_string(x="GROUP", y=varname, color="GROUP")) + geom_boxplot()
   ggsave(sprintf("%s%sboxplot.png", file.path, file.prefix))
   
-  # Q-Q for each group plots
-  # ggplot(in.df, aes_string(sample = varname, colour = "GROUP")) +
-  #   stat_qq() +
-  #   stat_qq_line()
-  # ggsave(sprintf("%s%sQQ.png", file.path, file.prefix))
-}
+  }
 
 plot.density = function(in.df, in.df.summary, param, varname="EoH", maf.bin = 0){
   file.path = sprintf("%s/plots/%s/", param$project.dir, param$stat.plots.dir)
@@ -684,13 +653,6 @@ eoh.outliers.analysis = function(in.df){
   png("pie.png")
   pie(plot.count$count, labels = lbls, radius = 1, col=rainbow(length(lbls)))
   dev.off() 
-  # snp.statistics = as.data.frame(table(EoH.anp.annotated$Consequence))
-  # colnames(snp.statistics) = c("type", "freq")
-  # snp.statistics = snp.statistics[with(snp.statistics, order(-freq)),]
-  # snp.statistics$perc = round(100*snp.statistics$freq/sum(snp.statistics$freq),1)
-  # colnames(snp.statistics) = c("type", "freq", "%")
-  # write.table(snp.statistics, file ="snp_type.snp", sep = "\t",
-  #             row.names = FALSE, col.names = TRUE, quote=FALSE)
   
 }
 eoh.max.dif.analysis = function(df){
@@ -709,11 +671,6 @@ eoh.max.dif.analysis = function(df){
   ggsave("EoHOMOZ_dif_for_maf.png")
   ggplot(df.plot, aes(MAF, EoHOMOZ.major.dif)) + geom_point(shape = ".") + labs(title = "EoHOMOZ.major: HA - controls")
   ggsave("EoHOMOZ_major_dif_for_maf.png")
-  
-  #df.plot.cutoff = df.plot[abs(df.plot$EoH.dif) >0.2, ]
-  # ggplot(df.plot[abs(df.plot$EoH.dif) >0.2, ], aes(MAF, EoH.dif)) + geom_point(shape = ".") +
-  #         labs(title = "EoH: HA - controls")
-  # ggsave("dif_for_maf_02.png")
   
   #plot HLA SNPs
   snp.filter.path = "/projects/cgstudies/HA_GWAS_2017/Healthy_Aging_GWAS_2017_ABW-P01/Analysis/HAS_Het_Analysis_OLGA/Heterozygosity_tests/NWE_data/annotation/HLA.snp"
@@ -811,18 +768,7 @@ eoh.regression.analysis = function(df){
   df.plot$type[df.plot$NONSYN == 1] = "NONSYN"
   
   save(df.plot, file = sprintf("%s/saved_data/%sdf.plot.RData", config$project.dir, config$subgroup.pref))
-  # tic("reading pre-saved plink.MAF data...")
-  # load(sprintf("%s/saved_data/%sdf.plot.RData", config$project.dir, config$subgroup.pref))
-  # toc()
-  
-  # library(brglm2)
-  # library(arm)
-  # library(logistf)
-  # data.fit = glm(EoH ~ CHR + SNP + GROUP + HLA + type, data = df.plot)
-  # summary(data.fit)
-  # data.fit.lm = lm(EoH ~ CHR + SNP + GROUP + HLA + type, data = df.plot)
-  # summary(data.fit.lm)
-}
+  }
 
 library(lattice)
 #https://github.com/etal/cnvkit/blob/master/cnvlib/scatter.py

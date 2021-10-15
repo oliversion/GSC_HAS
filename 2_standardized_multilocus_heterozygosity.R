@@ -1,9 +1,12 @@
+library(config)
+config = config::get(file = "config_files/config.yml")
+source(sprintf("%s/0_support_func.R", config$project.dir))
+
 # --------------------------------------------------------------------
 # ---------------------Data read--------------------------------------
 # --------------------------------------------------------------------
-project.dir = paste("/projects/cgstudies/HA_GWAS_2017/Healthy_Aging_GWAS_2017_ABW-P01/Analysis/HAS_Het_Analysis_OLGA/Heterozygosity_tests", sep="")
-source(sprintf("%s/support_func.R", project.dir))
 
+project.dir = config$project.dir
 data.file = "HA_data_HLA" #"HA_data_1_22"
 gwas.fn = lapply(c(bed='bed', bim='bim',fam='fam'), function(n) sprintf("%s/NWE_data/%s.%s", 
                                                                         project.dir, data.file, n))

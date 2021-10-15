@@ -1,8 +1,10 @@
 library(snpStats)
 library(tictoc)
+library(config)
+config = config::get(file = "config_files/config.yml")
 
 # ---------------------Data read------------------------------------------------------------------------
-project.dir = paste("/projects/cgstudies/HA_GWAS_2017/Healthy_Aging_GWAS_2017_ABW-P01/Analysis/HAS_Het_Analysis_OLGA/Heterozygosity_tests", sep="")
+project.dir = config$project.dir
 source(sprintf("%s/support_func.R", project.dir))
 
 data.file = "HA_data_1_22"

@@ -5,9 +5,12 @@ library(tictoc)
 library(VariantAnnotation)
 library(ensemblVEP)
 library(snpStats)
+library(config)
+config = config::get(file = "config_files/config.yml")
+
 # https://bioconductor.org/packages/release/bioc/vignettes/VariantAnnotation/inst/doc/VariantAnnotation.pdf
 
-project.dir = paste("/projects/cgstudies/HA_GWAS_2017/Healthy_Aging_GWAS_2017_ABW-P01/Analysis/HAS_Het_Analysis_OLGA/Heterozygosity_tests", sep="")
+project.dir = config$project.dir
 
 #Original data in plink format
 data.file = "NWE_final_cohort" # HA_data_HLA: filtered for 6:25.5M-33.5M

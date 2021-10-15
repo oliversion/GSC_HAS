@@ -1,15 +1,13 @@
 #if (!requireNamespace("BiocManager", quietly = TRUE))
 #  install.packages("BiocManager")
 #BiocManager::install("snpStats")
-# install.packages("ggplot2")
-# install.packages("plotly")
-
+library(config)
+config = config::get(file = "config_files/config.yml")
 library(snpStats)
 library(plotly)
 
 #----------Genomic control --------------------------------------------------
-data.dir = paste("/projects/cgstudies/HA_GWAS_2017/Healthy_Aging_GWAS_2017_ABW-P01/Analysis/HAS_Het_Analysis_OLGA/Genomic_contol", sep="")
-out.dir = data.dir
+data.dir = config$project.dirout.dir = data.dir
 
 # plink --bfile hapmap1 --assoc --adjust --out GC_assoc
 plink.GC = read.table(sprintf("%s/GC_assoc.assoc", data.dir), header =TRUE, as.is=T)
