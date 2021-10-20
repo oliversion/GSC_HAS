@@ -513,6 +513,102 @@ plot.chr = function(in.df, param, varname = "EoH"){
 }
 
 # ====================================================================
+# 2.         Standardized multilocus heterozygosity 
+# ====================================================================
+
+get.smh = function(in.genotype, use, in.snpsum.row, in.snpsum.col){
+  use[is.na(use)] = FALSE               
+  genotype.use = in.genotype[,use]
+  
+  snpsum.col.use = in.snpsum.col[use,]
+  snpsum.row.use =  row.summary(genotype.use)
+  
+  smh.filtered = standardized.multilocus.heterozygosity(genotype.use, snpsum.row.use, snpsum.col.use) 
+  smh.filtered = smh.filtered[,1]
+}
+get.heterozygosity.rate = function(in.genotype, use) {
+  use[is.na(use)] = FALSE               
+  genotype.use = in.genotype[,use]
+  snpsum.row.use =  row.summary(genotype.use)
+  hetObs = snpsum.row.use$Heterozygosity
+  # hetObs <- with(snpsum.row.use, Heterozygosity*(ncol(genotype.use))*Call.rate)
+}
+
+standardized.multilocus.heterozygosity = function(in.genotype, in.snpsum.row, in.snpsum.col) {
+  MAF <- in.snpsum.col$MAF
+  callmatrix <- !is.na(in.genotype)
+  hetExp <- callmatrix %*% (2*MAF*(1-MAF))
+  hetObs <- with(in.snpsum.row, Heterozygosity*(ncol(in.genotype))*Call.rate)
+  het.rate <- hetObs/hetExp # <- the heterozygosity metric 
+}
+
+sex.binning.stat = function(in.data, in.func, in.filter) {
+  
+  data.binned.stat = rbind(data.apply.func.smh(in.data, 2, in.func, in.filter), # cases
+                           data.apply.func.smh(in.data, 1, in.func, in.filter)) # controls
+  colnames(data.binned.stat) <- c("all","male","female")
+  rownames(data.binned.stat) <- c("HA","controls")   
+  data.binned.stat
+}
+data.apply.func.smh = function(in.data, affected, in.func, in.filter) {
+  data.binned.stat = c(in.func(in.data[in.filter$affected == affected]),
+                       in.func(in.data[in.filter$sex == 1 & in.filter$affected == affected]), # male
+                       in.func(in.data[in.filter$sex == 2 & in.filter$affected == affected])) # female
+  # printf("data.binned.stat: %f\n",  data.binned.stat)
+  data.binned.stat
+}
+
+stat.tests = function(in.stat, in.fam){
+  stat.cases    = in.stat[in.fam$affected == 2]
+  stat.controls = in.stat[in.fam$affected == 1]
+  
+  stat.binning.mean = sex.binning.stat(in.stat, mean, in.fam) 
+  printf("smh.binning.mean: \n")
+  print(stat.binning.mean)
+  
+  printf("\n mean difference HA-controls: \n")
+  print(stat.binning.mean[1,]-stat.binning.mean[2,])
+  
+  # statistical tests:
+  test.data = stack(list(g1=stat.cases, g2=stat.controls))
+  
+  printf("\nMann–Whitney U Test: HA vs controls: ")
+  #output = wilcox.test(stat.cases, stat.controls)
+  output = wilcox.test(values~ind, test.data) 
+  print(output$p.value)
+  
+  printf("Fligner-Killeen Test Of Homogeneity Of Variances: HA vs controls: ")
+  #output = fligner.test(stat.cases, stat.controls)
+  output = fligner.test(values~ind, test.data) 
+  print(output$p.value)
+  
+  stat.cases.male    = smh[in.fam$sex == 1 & in.fam$affected == 2]
+  stat.controls.male = smh[in.fam$sex == 1 & in.fam$affected == 1]
+  test.data = stack(list(g1=stat.cases.male, g2=stat.controls.male))
+  
+  printf("\nMann–Whitney U Test: male HA vs controls: ")
+  output = wilcox.test(values~ind, test.data) 
+  print(output$p.value)
+  
+  printf("Fligner-Killeen Test Of Homogeneity Of Variances: male HA vs controls: ")
+  output = fligner.test(values~ind, test.data) 
+  print(output$p.value)
+  
+  stat.cases.female    = smh[in.fam$sex == 2 & in.fam$affected == 2]
+  stat.controls.female = smh[in.fam$sex == 2 & in.fam$affected == 1]
+  test.data = stack(list(g1=stat.cases.female, g2=stat.controls.female))
+  
+  printf("\nMann–Whitney U Test: female HA vs controls: ")
+  output = wilcox.test(values~ind, test.data) 
+  print(output$p.value)
+  
+  printf("Fligner-Killeen Test Of Homogeneity Of Variances: female HA vs controls: ")
+  output = fligner.test(values~ind, test.data) 
+  print(output$p.value)
+}
+
+
+# ====================================================================
 #            UTILITIES
 # ====================================================================
 printf = function(...) cat(sprintf(...))
