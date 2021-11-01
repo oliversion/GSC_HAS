@@ -1,11 +1,3 @@
-# FOR RUNNING REQUIRED: set currect dir to the this file folder and "config" package
-#
-# setwd("/projects/cgstudies/HA_GWAS_2017/Healthy_Aging_GWAS_2017_ABW-P01/Analysis/HAS_Het_Analysis_OLGA/Heterozygosity_tests")
-# install.packages("config")
-# https://cran.r-project.org/web/packages/config/vignettes/introduction.html
-
-# upload all global parameters (default settings) such as paths, project.dir, is.recovery.mode, prefix for saving outputs etc.
-# config = config::get()
 library(config)
 config = config::get(file = "config_files/config.yml")
 
