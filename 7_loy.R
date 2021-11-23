@@ -1,15 +1,11 @@
 # import libraries====================================================================
-library(config)
-library(snpStats)
 library(tictoc)
 library(ggplot2)
-config = config::get(file = "roh_config.yml")
-source("0_support_func.R")
 
 #====================================================================
 #      READ DATA
 # ====================================================================
-report.dir = "/projects/cgstudies/HA_GWAS_2017/Healthy_Aging_GWAS_2017_ABW-P01/Analysis/GenomeStudio/Healthy_Aging_GWAS_2017_ABW-P01_Final_SJJONES/200520_SexChromosomes/190510_Final_SexChecks_test_addedBAF-LRR4Olga"
+report.dir = ""
 sample.map = read.csv(sprintf("%s/%s", report.dir, "Sample_Map.txt"), header =T, as.is=T, sep = "\t")
 # raw.Y.region = read.csv(sprintf("%s/%s", report.dir, "out_Y_region.txt"), header =F, as.is=T, sep = "\t")
 raw.Y.region = read.csv(sprintf("%s/%s", report.dir, "Out.txt"), header =F, as.is=T, sep = "\t")
@@ -56,6 +52,4 @@ p4 = ggplot(sample.Y, aes(x=BAF)) +
 file.name = sprintf("~/output/12_LOY/%s.%s", "LOY_example", "pdf")
 ggsave(filename=file.name, plot=multiplot(p1, p2, cols=2), height = 8, width = 14)
   
-
-
 
