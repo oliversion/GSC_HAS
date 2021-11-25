@@ -1,7 +1,7 @@
 default:
   recovery.mode : true # all data for analysis are preprocessed and saved to a disk after first run. After they could be reused in recovery.mod
   install.libraries: false
-  project.dir: "/projects/cgstudies/HA_GWAS_2017/Healthy_Aging_GWAS_2017_ABW-P01/Analysis/HAS_Diversity_OLGA"
+  project.dir: ""
   plink.hom.indiv: "ROH/plink.hom.indiv"
   plink.hom.indiv.autosomal: "ROH/plink_homozyg/roh_autosomal.hom.indiv"
   plink.hom.indiv.X: "ROH/plink_homozyg/roh_x.hom.indiv"
