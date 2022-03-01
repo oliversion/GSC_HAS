@@ -2,7 +2,7 @@
 
 target_data='/projects/cgstudies/HAS_Diversity_OLGA/data/step3_remove_related_and_duplicate_samples/HA_LFS_hapmap_hh_sex_dup_tri_rsID_dup2_strand-flip_tri2_HAonly_maf0_saliva05_related'
 
-wwrking_dir='/projects/cgstudies/HAS_Diversity_OLGA/data/sonny_dir/working'
+working_dir='/projects/cgstudies/HAS_Diversity_OLGA/data/sonny_dir/working'
 source_dir='/projects/cgstudies/HAS_Diversity_OLGA/data/sonny_dir/source_data'
 
 ##### QC on 1000 Genomes data #####

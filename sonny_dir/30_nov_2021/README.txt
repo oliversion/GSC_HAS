@@ -14,10 +14,16 @@
 
 # We weren't sure which data in the 'data' folder we should use as our super-senior data. 
 # So we picked one that looked fairly reasonable.
+# The thresholds for MAF, HWE p-values, and the missing genotype rate referred to the values on /projects/cgstudies/HAS_Diversity_OLGA/data/plink_qc.sh
 
-target_data=target_data='/projects/cgstudies/HAS_Diversity_OLGA/data/step3_remove_related_and_duplicate_samples/HA_LFS_hapmap_hh_sex_dup_tri_rsID_dup2_strand-flip_tri2_HAonly_maf0_saliva05_related'
+target_data=target_data='/projects/cgstudies/HAS_Diversity_OLGA/data/step3_remove_related_and_duplicate_samples/HA_LFS_hapmap_hh_sex_dup_tri_rsID_dup2_strand-flip_tri2_HAonly_maf0_saliva05_related' # HAS data dir
 
-working_dir='/projects/cgstudies/HAS_Diversity_OLGA/data/sonny_dir/working'
+source_dir='/projects/cgstudies/HAS_Diversity_OLGA/data/sonny_dir/source_data' # 1kG data dir
+
+working_dir='/projects/cgstudies/HAS_Diversity_OLGA/data/sonny_dir/working' ## Sonnys working dir
+
+rscripts_dir='/projects/cgstudies/HAS_Diversity_OLGA/data/sonny_dir/Rscripts' ## Sonnys rscript dir
+
 
 
 ## Copy target_data and save it as HAS_init0
@@ -32,15 +38,15 @@ plink --bfile HAS_init1 --geno 0.03 --make-bed --out HAS_init2
 ## Remove SNPs with HWE p-values <1x10-6
 plink --bfile HAS_init2 --hwe 1e-6 --make-bed --out HAS_init3
 
-## Remove SNPs with MAF < 0.01 (1%) 
-plink --bfile HAS_init3 --maf 0.01 --make-bed --out HAS_init4
+## Remove SNPs with MAF < 0.005 (0.05%) 
+plink --bfile HAS_init3 --maf 0.005 --make-bed --out HAS_init4
 
 ## LD pruning
 plink --bfile HAS_init4 --indep-pairwise 50 5 0.5 --out HAS_indepSNP
 
 ## QC on 1000 Genomes data #####
 
-plink --bfile $source_dir/1kG_data/ALL.2of4intersection.20100804.genotypes_no_missing_IDs --allow-no-sex --make-bed --out $working_dir/1kG_init
+plink --bfile $source_dir/1kG_data/ALL.2of4intersection.20100804.genotypes_no_missing_IDs --allow-no-sex --make-bed --out $working_dir/1kG_init  # 1kG data downloaded on 
 
 ## Extract SNPs from autosomes only
 plink --bfile 1kG_init --chr 1-22 --make-bed --out 1kG_init1
@@ -73,7 +79,6 @@ plink --bfile $source_HAS --extract 1kG_MDS1_SNPs.txt --recode --make-bed --out 
 
 # C10_exclude_dup_SNPs.sh
 
-rscripts_dir='/projects/cgstudies/HAS_Diversity_OLGA/data/sonny_dir/Rscripts'
 
 ## check duplicated SNPs in 1kG data
 Rscript --no-save $rscripts_dir/check_dup_SNPs.R
